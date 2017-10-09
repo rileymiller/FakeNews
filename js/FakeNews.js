@@ -47,6 +47,7 @@ function move() {
 
 window.addEventListener("keydown", function(e) {
     console.log(e.keyCode);
+    e.preventDefault();
     keys[e.keyCode] = true;
     console.log(keys);
 });
