@@ -29,7 +29,14 @@ var velY = 0;
 var keys = [];
 var maxSpeed = 12;
 
+var shoot = false;
+var rocketY = 0;
+var rocketVel = 0;
 
+var rockets = [];
+var rocketNum = 0;
+
+var allowed = false;
 
 function move() {
 
@@ -45,20 +52,61 @@ function move() {
 
 }
 
+/*
+ *   Shoot
+ * Call getTweet()
+ */
+function fire() {
+
+    if (shoot) {
+        var text = getTweet();
+        console.log('inside tweet()');
+        console.log(text);
+        shoot = false;
+        rocketNum++;
+        var rocket = {
+            x: trumpX,
+            vel: rocketVel,
+            msg: text,
+            num: rocketNum
+        }
+        rockets.push(rocket);
+    }
+
+}
+
+function collision() {
+
+}
+
 window.addEventListener("keydown", function(e) {
-    console.log(e.keyCode);
+    //console.log(e.keyCode);
+    if (e.repeat != undefined) {
+        allowed = !event.repeat;
+    }
+    if (!allowed) return;
+    allowed = false;
     e.preventDefault();
     keys[e.keyCode] = true;
-    console.log(keys);
+    e.stopPropagation();
+    // console.log(keys);
 });
 window.addEventListener("keyup", function(e) {
-    console.log(e.keyCode);
+    //console.log(e.keyCode);
+    spaceKey();
+
     keys[e.keyCode] = false;
-    console.log(keys);
+    allowed = true;
+    // console.log(keys);
 });
 
 
-
+function spaceKey() {
+     if (keys[32]) {
+        shoot = true;
+        fire();
+    }
+}
 
 function whatKey() {
     if (keys[37]) {
@@ -78,12 +126,19 @@ function whatKey() {
         }
         //  move();
     }
+
+   
 }
+
+
 
 function draw() {
     //clear(ctx);
-    whatKey();
+    //whatKey();
     move();
+    whatKey();
+
+    collision();
     ctx.clearRect(0, 0, width, height);
     ctx.drawImage(img, trumpX, trumpY, trumpX_scale, trumpY_scale);
     ctx.strokeRect(trumpX, trumpY, trumpX_scale, trumpY_scale);
