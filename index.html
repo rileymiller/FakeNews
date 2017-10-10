@@ -4,23 +4,38 @@
 <head>
     <title>FakeNews</title>
     <link rel="stylesheet" type="text/css" href="css/FakeNews.css">
+    <link rel="stylesheet" type="text/css" href="HighScoreAPI/highscore.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="HighscoreAPI/HighscoreAPI.js"></script>
 
 </head>
-
 <body>
-
     <header>
         <h1>Fake News</h1>
         <p>Here is a short description of the game</p>
     </header>
-    <section>
+    <section >
         <canvas id="canvas" width="1400" height="800"></canvas>
         <img src="images/trump_crop.png" id="trump">
+        <div id="highdiv">
+            <table id="hightable">
+                <tr>
+                    <th>User</th>
+                    <th>Score</th>
+                </tr>
+            </table>
+            <table id="myhightable">
+                <tr>
+                    <th colspan="2">Your High Score</th>
+                </tr>
+                <tr id="myhighscore">
+                    <td colspan="2">You don't have one yet!</td>
+                </tr>
+            </table>
+        </div>
     </section>
-    <footer>
         
-    	
+    <footer>
         <script type="text/javascript" src="twitter/tweet.js"></script>
         <script type="text/javascript" src="js/twitter.js"></script>
         <script type="text/javascript" src="js/FakeNews.js" ></script>

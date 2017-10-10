@@ -100,7 +100,7 @@ function getImage() {
 
 window.onload = function() {
     //drawSmile();
-
+    update_scores(); // high score API call
     trumpX = centerX - 50;
     trumpY = height - trumpY_scale;
     window.requestAnimationFrame(draw);

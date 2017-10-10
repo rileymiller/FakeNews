@@ -11,12 +11,10 @@ function populateTweets() {
 
 function getTweet() {
 	var randomNum = Math.floor(Math.random() * allTweets.length);
-	console.log(randomNum);
 	console.log(allTweets[randomNum]);
 	return allTweets[randomNum];
 };
 
 populateTweets();
-console.log(allTweets.length);
 getTweet();
 
