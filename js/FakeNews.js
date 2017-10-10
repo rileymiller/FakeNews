@@ -23,13 +23,42 @@ var trumpY;
 var img = document.getElementById('trump');
 var trumpX_scale = 100;
 var trumpY_scale = 100;
-var newsImages = ['abc.png', 'cbs.png', 'cnn.png', 'nbc.png', 'nyt.png', 'wp.png', 'wsj.png'];
+
+var tweets = [];
 
 var velX = 0;
 var velY = 0;
 var keys = [];
 var maxSpeed = 12;
 
+
+var shoot = false;
+var rocketY = 0;
+var rocketVel = 0;
+
+var rockets = [];
+var rocketNum = 0;
+
+var allowed = false;
+
+
+var tweetXScale = 100;
+var tweetYScale = 100; 
+
+function tweet(x) {
+	this.x =  x;
+	this.y = 0;
+	this.speedY = 0;
+	
+	this.newPos = function() {
+		this.y += 5;     // make tweet fall
+	}
+}
+
+function generateTweets() {
+	var tweetInst = new tweet(Math.floor(Math.random() * (width)));
+	tweets.push(tweetInst);
+}
 
 
 function move() {
@@ -46,20 +75,61 @@ function move() {
 
 }
 
+/*
+ *   Shoot
+ * Call getTweet()
+ */
+function fire() {
+
+    if (shoot) {
+        var text = getTweet();
+        console.log('inside tweet()');
+        console.log(text);
+        shoot = false;
+        rocketNum++;
+        var rocket = {
+            x: trumpX,
+            vel: rocketVel,
+            msg: text,
+            num: rocketNum
+        }
+        rockets.push(rocket);
+    }
+
+}
+
+function collision() {
+
+}
+
 window.addEventListener("keydown", function(e) {
-    console.log(e.keyCode);
+    //console.log(e.keyCode);
+    if (e.repeat != undefined) {
+        allowed = !event.repeat;
+    }
+    if (!allowed) return;
+    allowed = false;
     e.preventDefault();
     keys[e.keyCode] = true;
-    console.log(keys);
+    e.stopPropagation();
+    // console.log(keys);
 });
 window.addEventListener("keyup", function(e) {
-    console.log(e.keyCode);
+    //console.log(e.keyCode);
+    spaceKey();
+
     keys[e.keyCode] = false;
-    console.log(keys);
+    allowed = true;
+    // console.log(keys);
 });
 
 
-
+function spaceKey() {
+     if (keys[32]) {
+        shoot = true;
+        fire();
+    }
+}
 
 function whatKey() {
     if (keys[37]) {
@@ -79,23 +149,45 @@ function whatKey() {
         }
         //  move();
     }
+
+   
 }
+
+
+setInterval(function() {	
+		generateTweets();
+		}, 2000);
 
 function draw() {
     //clear(ctx);
-    whatKey();
+    //whatKey();
     move();
+    whatKey();
+
+    collision();
     ctx.clearRect(0, 0, width, height);
     ctx.drawImage(img, trumpX, trumpY, trumpX_scale, trumpY_scale);
     ctx.strokeRect(trumpX, trumpY, trumpX_scale, trumpY_scale);
 
-    window.requestAnimationFrame(draw);
-}
+    //clear(ctx);
 
-function getImage() {
-    var randomNum = Math.floor(Math.random() * newsImages.length);
-    console.log(('../images/'+newsImages[randomNum]));
-    return ('../images/'+newsImages[randomNum]);
+		for (i = 0; i < tweets.length; i++) {
+			tweets[i].newPos();
+		}
+		whatKey();
+		move();
+		ctx.clearRect(0, 0, width, height);
+		ctx.drawImage(img, trumpX, trumpY, trumpX_scale, trumpY_scale);
+		ctx.strokeRect(trumpX, trumpY, trumpX_scale, trumpY_scale);
+	
+		// draw box representing tweet
+		console.log(tweets.length);
+		for (i = 0; i < tweets.length; i++) {
+		    ctx.strokeRect(tweets[i].x, tweets[i].y, tweetXScale, tweetYScale);
+		}
+		
+	window.requestAnimationFrame(draw);
+	
 }
 
 window.onload = function() {
@@ -103,6 +195,7 @@ window.onload = function() {
     update_scores(); // high score API call
     trumpX = centerX - 50;
     trumpY = height - trumpY_scale;
-    window.requestAnimationFrame(draw);
 
+    window.requestAnimationFrame(draw);
+	
 }
