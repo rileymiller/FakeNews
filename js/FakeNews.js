@@ -23,8 +23,12 @@ var trumpY;
 var img = document.getElementById('trump');
 var trumpX_scale = 100;
 var trumpY_scale = 100;
+var images = ['abc.png', 'cbs.png', 'cnn.png', 'nbc.png', 'nyt.png', 'wp.png', 'wsj.png'];
 
-var tweets = [];
+// holds the position of the news agencies
+var news = [];
+// holds the image of the news agencies - same index as the position.
+var newsImages = [];
 
 var velX = 0;
 var velY = 0;
@@ -55,14 +59,18 @@ function tweet(x) {
 	}
 }
 
-function generateTweets() {
+function generatenews() {
 	var tweetInst = new tweet(Math.floor(Math.random() * (width)));
-	tweets.push(tweetInst);
+	news.push(tweetInst);
+    newsImages.push(getImage());
 }
 
+function getImage() {
+    var randomNum = Math.floor(Math.random() * images.length);
+    return ('images/'+images[randomNum]);
+ }
 
 function move() {
-
     if (velX > 0) {
         if ((trumpX + velX) <= width - trumpX_scale) {
             trumpX += velX;
@@ -72,7 +80,6 @@ function move() {
             trumpX += velX;
         }
     }
-
 }
 
 /*
@@ -80,7 +87,6 @@ function move() {
  * Call getTweet()
  */
 function fire() {
-
     if (shoot) {
         var text = getTweet();
         console.log('inside tweet()');
@@ -95,7 +101,6 @@ function fire() {
         }
         rockets.push(rocket);
     }
-
 }
 
 function collision() {
@@ -103,7 +108,6 @@ function collision() {
 }
 
 window.addEventListener("keydown", function(e) {
-    //console.log(e.keyCode);
     if (e.repeat != undefined) {
         allowed = !event.repeat;
     }
@@ -112,15 +116,12 @@ window.addEventListener("keydown", function(e) {
     e.preventDefault();
     keys[e.keyCode] = true;
     e.stopPropagation();
-    // console.log(keys);
 });
 window.addEventListener("keyup", function(e) {
-    //console.log(e.keyCode);
     spaceKey();
 
     keys[e.keyCode] = false;
     allowed = true;
-    // console.log(keys);
 });
 
 
@@ -133,58 +134,53 @@ function spaceKey() {
 
 function whatKey() {
     if (keys[37]) {
-        //velX = -10;
         if (velX > -maxSpeed) {
             velX -= 0.5;
             console.log('left velX: ' + velX);
         }
-        // move();
     }
 
     if (keys[39]) {
-        //velX = 10;
         if (velX < maxSpeed) {
             velX += 0.5;
             console.log('left velX: ' + velX);
         }
-        //  move();
-    }
-
-   
+    } 
 }
 
-
 setInterval(function() {	
-		generateTweets();
-		}, 2000);
+	generatenews();
+}, 2000);
 
 function draw() {
     //clear(ctx);
     //whatKey();
     move();
     whatKey();
-
     collision();
+
     ctx.clearRect(0, 0, width, height);
     ctx.drawImage(img, trumpX, trumpY, trumpX_scale, trumpY_scale);
     ctx.strokeRect(trumpX, trumpY, trumpX_scale, trumpY_scale);
 
     //clear(ctx);
 
-		for (i = 0; i < tweets.length; i++) {
-			tweets[i].newPos();
-		}
-		whatKey();
-		move();
-		ctx.clearRect(0, 0, width, height);
-		ctx.drawImage(img, trumpX, trumpY, trumpX_scale, trumpY_scale);
-		ctx.strokeRect(trumpX, trumpY, trumpX_scale, trumpY_scale);
-	
-		// draw box representing tweet
-		console.log(tweets.length);
-		for (i = 0; i < tweets.length; i++) {
-		    ctx.strokeRect(tweets[i].x, tweets[i].y, tweetXScale, tweetYScale);
-		}
+	for (i = 0; i < news.length; i++) {
+		news[i].newPos();
+	}
+	whatKey();
+	move();
+	ctx.clearRect(0, 0, width, height);
+	ctx.drawImage(img, trumpX, trumpY, trumpX_scale, trumpY_scale);
+	ctx.strokeRect(trumpX, trumpY, trumpX_scale, trumpY_scale);
+
+	//draw box representing tweet
+	for (i = 0; i < news.length; i++) {
+        var image = new Image(60, 45);   
+        image.src = newsImages[i]; // gets the image at the index of the news object
+        ctx.drawImage(image, news[i].x, news[i].y, tweetXScale, tweetYScale);
+	    ctx.strokeRect(news[i].x, news[i].y, tweetXScale, tweetYScale);
+	}
 		
 	window.requestAnimationFrame(draw);
 	
