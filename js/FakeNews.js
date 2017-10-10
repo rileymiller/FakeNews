@@ -23,6 +23,7 @@ var trumpY;
 var img = document.getElementById('trump');
 var trumpX_scale = 100;
 var trumpY_scale = 100;
+var newsImages = ['abc.png', 'cbs.png', 'cnn.png', 'nbc.png', 'nyt.png', 'wp.png', 'wsj.png'];
 
 var velX = 0;
 var velY = 0;
@@ -89,6 +90,12 @@ function draw() {
     ctx.strokeRect(trumpX, trumpY, trumpX_scale, trumpY_scale);
 
     window.requestAnimationFrame(draw);
+}
+
+function getImage() {
+    var randomNum = Math.floor(Math.random() * newsImages.length);
+    console.log(('../images/'+newsImages[randomNum]));
+    return ('../images/'+newsImages[randomNum]);
 }
 
 window.onload = function() {
