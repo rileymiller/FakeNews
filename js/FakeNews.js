@@ -23,14 +23,31 @@ var trumpY;
 var img = document.getElementById('trump');
 var trumpX_scale = 100;
 var trumpY_scale = 100;
-var newsImages = ['abc.png', 'cbs.png', 'cnn.png', 'nbc.png', 'nyt.png', 'wp.png', 'wsj.png'];
+
+var tweets = [];
 
 var velX = 0;
 var velY = 0;
 var keys = [];
 var maxSpeed = 12;
 
+var tweetXScale = 100;
+var tweetYScale = 100; 
 
+function tweet(x) {
+	this.x =  x;
+	this.y = 0;
+	this.speedY = 0;
+	
+	this.newPos = function() {
+		this.y += 5;     // make tweet fall
+	}
+}
+
+function generateTweets() {
+	var tweetInst = new tweet(Math.floor(Math.random() * (width)));
+	tweets.push(tweetInst);
+}
 
 function move() {
 
@@ -81,21 +98,30 @@ function whatKey() {
     }
 }
 
+setInterval(function() {	
+		generateTweets();
+		}, 2000);
+
 function draw() {
     //clear(ctx);
-    whatKey();
-    move();
-    ctx.clearRect(0, 0, width, height);
-    ctx.drawImage(img, trumpX, trumpY, trumpX_scale, trumpY_scale);
-    ctx.strokeRect(trumpX, trumpY, trumpX_scale, trumpY_scale);
 
-    window.requestAnimationFrame(draw);
-}
-
-function getImage() {
-    var randomNum = Math.floor(Math.random() * newsImages.length);
-    console.log(('../images/'+newsImages[randomNum]));
-    return ('../images/'+newsImages[randomNum]);
+		for (i = 0; i < tweets.length; i++) {
+			tweets[i].newPos();
+		}
+		whatKey();
+		move();
+		ctx.clearRect(0, 0, width, height);
+		ctx.drawImage(img, trumpX, trumpY, trumpX_scale, trumpY_scale);
+		ctx.strokeRect(trumpX, trumpY, trumpX_scale, trumpY_scale);
+	
+		// draw box representing tweet
+		console.log(tweets.length);
+		for (i = 0; i < tweets.length; i++) {
+		    ctx.strokeRect(tweets[i].x, tweets[i].y, tweetXScale, tweetYScale);
+		}
+		
+	window.requestAnimationFrame(draw);
+	
 }
 
 window.onload = function() {
@@ -103,6 +129,7 @@ window.onload = function() {
 
     trumpX = centerX - 50;
     trumpY = height - trumpY_scale;
-    window.requestAnimationFrame(draw);
 
+    window.requestAnimationFrame(draw);
+	
 }
