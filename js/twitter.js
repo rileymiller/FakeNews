@@ -11,7 +11,6 @@ function populateTweets() {
 
 function getTweet() {
 	var randomNum = Math.floor(Math.random() * allTweets.length);
-	console.log(allTweets[randomNum]);
 	return allTweets[randomNum];
 };
 
