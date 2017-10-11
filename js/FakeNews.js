@@ -26,7 +26,6 @@ var trumpY_scale = 100;
 var images = ['abc.png', 'cbs.png', 'cnn.png', 'nbc.png', 'nyt.png', 'wp.png', 'wsj.png'];
 
 var newsArr = []; // holds the position of the news agencies
-var newsImages = []; // holds the image of the news agencies - same index as the position.
 
 var velX = 0;
 var velY = 0;
@@ -47,30 +46,24 @@ var allowed = false;
 var tweetXScale = 100;
 var tweetYScale = 100; 
 
+// Initialize gameplay variables
+var score = 0;
+var lives = 3;
+
 function news(x) {
 	this.x =  x;
 	this.y = 0;
 	this.speedY = 0;
+    this.image = getImage();
 	
 	this.newPos = function() {
 		this.y += 5;     // make news fall
 	}
 }
 
-// function tweet() {
-//     this.x = trumpX;
-//     this.y = trumpY*2;
-//     this.speedY = 0;
-
-//     this.newPos = function() {
-//         this.y -= 5;
-//     }
-// }
-
 function generatenews() {
 	var newsInst = new news(Math.floor(Math.random() * (width)));
 	newsArr.push(newsInst);
-    newsImages.push(getImage());
 }
 
 function getImage() {
@@ -113,12 +106,28 @@ function fire() {
             num: rocketNum
         }
         rockets.push(rocket);
-        console.log(rockets);
     }
 }
 
 function collision() {
-
+    for(i = 0; i < newsArr.length; i++) {
+        var currNews = newsArr[i];
+        if(currNews.y+tweetYScale == height) {
+            lives--;
+            $("#lives").html("Lives: " + lives);
+        }
+        for(j = 0; j < rockets.length; j++) {
+            var currRocket = rockets[j];
+            if((currNews.y+2*tweetYScale >= currRocket.y && currNews.y-tweetYScale <= currRocket.y) && 
+                (currRocket.x >= currNews.x-tweetXScale && currRocket.x <= currNews.x+tweetXScale)) {
+                newsArr.splice(i,1);
+                rockets.splice(j,1);
+                score++;
+                $("#score").html("Score: " + score);
+                console.log(newsArr.length);
+            }
+        }
+    }
 }
 
 window.addEventListener("keydown", function(e) {
@@ -150,35 +159,38 @@ function whatKey() {
     if (keys[37]) {
         if (velX > -maxSpeed) {
             velX -= 0.5;
-            console.log('left velX: ' + velX);
         }
     }
 
     if (keys[39]) {
         if (velX < maxSpeed) {
             velX += 0.5;
-            console.log('left velX: ' + velX);
         }
     } 
 }
 
 setInterval(function() {	
 	generatenews();
-}, 2000);
+}, 1500);
 
 function draw() {
-    //clear(ctx);
     //whatKey();
     move();
     moveRockets();
     whatKey();
     collision();
+    if(lives == 0) {
+        
+        gameOver();
+        // make call to the Highscore API
+        highscore(score);
+        return;
+    }
 
     ctx.clearRect(0, 0, width, height);
     ctx.drawImage(img, trumpX, trumpY, trumpX_scale, trumpY_scale);
     ctx.strokeRect(trumpX, trumpY, trumpX_scale, trumpY_scale);
 
-    //clear(ctx);
 
 	for (i = 0; i < newsArr.length; i++) {
 		newsArr[i].newPos();
@@ -192,7 +204,7 @@ function draw() {
 	//draw box representing news
 	for (i = 0; i < newsArr.length; i++) {
         var image = new Image(60, 45);   
-        image.src = newsImages[i]; // gets the image at the index of the news object
+        image.src = newsArr[i].image; // gets the image at the index of the news object
         ctx.drawImage(image, newsArr[i].x, newsArr[i].y, tweetXScale, tweetYScale);
 	    ctx.strokeRect(newsArr[i].x, newsArr[i].y, tweetXScale, tweetYScale);
 	}
@@ -206,8 +218,12 @@ function draw() {
         ctx.drawImage(image, rockets[i].x, rockets[i].y, tweetXScale, tweetYScale);
         wrapText(ctx, rockets[i].msg, rockets[i].x+50, rockets[i].y-80, maxWidth+25, 12);
     }	
-	window.requestAnimationFrame(draw);
-	
+    
+    if(lives > 0) {
+       window.requestAnimationFrame(draw); 
+    } else {
+        window.clear();
+    }
 }
 
 function wrapText(context, text, x, y, maxWidth, lineHeight) {
@@ -230,7 +246,25 @@ function wrapText(context, text, x, y, maxWidth, lineHeight) {
       }
     }
     context.fillText(line, x, y);
-  }
+}
+
+function gameOver () {
+    // clear screen and don't draw anything if the game is over
+    ctx.clearRect(0,0,width,height);
+    var image = new Image();
+    image.src = "images/flag.png";
+    image.onload = function() {
+        ctx.globalAlpha = 0.4;
+        ctx.drawImage(image, 0, 0, width, height);
+        ctx.globalAlpha = 1.0;
+        ctx.font = "bold 48px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("GAME OVER", width/2, height/3);
+        ctx.fillText("SCORE: " + score, width/2, height/3+ 75);
+        ctx.font = "normal 24px Arial";
+        ctx.fillText("Refresh the page to play again...", width/2, height - 25);
+    }
+}
 
 window.onload = function() {
     //drawSmile();
