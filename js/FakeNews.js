@@ -170,9 +170,7 @@ function whatKey() {
     } 
 }
 
-setInterval(function() {	
-	generatenews();
-}, 1500);
+
 
 function draw() {
     //whatKey();
@@ -273,6 +271,10 @@ function startOver() {
 
 $("#start").click(function() {
     
+	setInterval(function() {	
+		generatenews();
+	}, 1500);
+	
     if(startPressed % 2 == 0 ){
         startPressed++;
         $("#start").html("RESTART");
