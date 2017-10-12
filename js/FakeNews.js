@@ -124,7 +124,6 @@ function collision() {
                 rockets.splice(j,1);
                 score++;
                 $("#score").html("Score: " + score);
-                console.log(newsArr.length);
             }
         }
     }

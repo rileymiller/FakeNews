@@ -7,17 +7,17 @@
     <link rel="stylesheet" type="text/css" href="HighScoreAPI/highscore.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="HighscoreAPI/HighscoreAPI.js"></script>
-
 </head>
 <body>
     <header>
         <h1>Fake News</h1>
-        <p>Here is a short description of the game</p>
+        <p id="intro">Help Trump stop the Fake News! Use the left and right arrows to move Trump and the space bar to shoot tweets at the Fake News agencies falling from the sky. If 3 news agencies reach the ground you lose. Try and shoot down as many as you can!</p>
+        <hr>
     </header>
-    <section >
+    <section>
         <p id="score">Score: 0</p>
         <p id="lives">Lives: 3</p>
-        <canvas id="canvas" width="1400" height="800"></canvas>
+        <canvas id="canvas" width="1400" height="700"></canvas>
         <img src="images/trump_crop.png" id="trump">
         <div id="highdiv">
             <table id="hightable">
