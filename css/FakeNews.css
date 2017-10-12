@@ -27,6 +27,10 @@ h1 {
 	padding-top: 20px;
 }
 
+h2 {
+	text-align: center;
+}
+
 p#lives, p#score {
 	display: inline-block;
 	width: 100px;
