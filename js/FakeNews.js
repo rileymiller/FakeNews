@@ -50,6 +50,8 @@ var tweetYScale = 100;
 var score = 0;
 var lives = 3;
 
+var startPressed = 0;
+
 function news(x) {
 	this.x =  x;
 	this.y = 0;
@@ -265,12 +267,31 @@ function gameOver () {
     }
 }
 
-window.onload = function() {
-    //drawSmile();
+function startOver() {
+
+}
+
+$("#start").click(function() {
+    
+    if(startPressed % 2 == 0 ){
+        startPressed++;
+        $("#start").html("RESTART");
+        
+    } else {
+        location.reload();
+    }
+    
     update_scores(); // high score API call
     trumpX = centerX - 50;
     trumpY = height - trumpY_scale;
-
     window.requestAnimationFrame(draw);
+});
+// window.onload = function() {
+//     //drawSmile();
+//     update_scores(); // high score API call
+//     trumpX = centerX - 50;
+//     trumpY = height - trumpY_scale;
+
+//     window.requestAnimationFrame(draw);
 	
-}
+// }

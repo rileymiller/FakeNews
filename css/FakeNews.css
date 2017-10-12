@@ -43,6 +43,21 @@ p#lives, p#score {
 	margin-left: 25px;
 }
 
+p#start {
+	width: 100px;
+	color: white;
+	font-size: 20px;
+	font-weight: bold;
+	background-color: rgb(34,139,34);
+	padding: 15px;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+p#start:hover {
+	background-color: rgba(34,139,34,0.5);
+}
+
 p#intro {
 	font-size: 16px; 
 	width: 800px;
