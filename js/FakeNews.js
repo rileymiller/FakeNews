@@ -212,7 +212,7 @@ function draw() {
 	for (i = 0; i < rockets.length; i++) {
         var maxWidth = tweetXScale;
         var maxHeight = tweetYScale;
-        var image = new Image(50,50);
+        var image = new Image(25,25);
         image.src = "images/rocket.jpg";
         ctx.drawImage(image, rockets[i].x, rockets[i].y, tweetXScale, tweetYScale);
         wrapText(ctx, rockets[i].msg, rockets[i].x+50, rockets[i].y-80, maxWidth+25, 12);

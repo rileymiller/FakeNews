@@ -1,12 +1,13 @@
 body {
 	background-color: aliceblue;
+	overflow-x: hidden;
 }
 
 #canvas {
 	background-color: white;
     padding-left: 0;
     padding-right: 0;
-    margin-left: 25px;
+    margin-left: auto;
     margin-right: auto;
     display: block;
     border: solid 1px #DFDCE3;
@@ -27,14 +28,14 @@ h1 {
 }
 
 p#lives, p#score {
-	display: block;
+	display: inline-block;
 	width: 100px;
 	color: white;
 	font-size: 20px;
 	font-weight: bold;
 	background-color: rgba(178,34,34,0.8); 
-	padding: 25px;
-	float: left;
+	padding: 15px;
+	/*float: left;*/
 	margin-left: 25px;
 }
 
@@ -45,4 +46,10 @@ p#intro {
 	font-weight: bold;
 	margin: auto;
 	margin-top: 20px;
+}
+
+div#menu {
+	display: block;
+	width: 100%;
+	text-align: center;
 }
