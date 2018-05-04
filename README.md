@@ -1,5 +1,5 @@
 # FakeNews
-A JavaScript game
+A JavaScript game, to play: https://rileymiller.github.io/FakeNews.io/
 
 # Consumer and Secret Key
 Consumer Key (API Key)	VEGbK5LmVhsVhceryxbsPqmuN
